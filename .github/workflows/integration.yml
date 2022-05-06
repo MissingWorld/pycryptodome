@@ -7,29 +7,29 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: [ 2.7, 3.5, 3.6, 3.7, 3.8, 3.9 ]
+        python-version: [ 2.7, 3.5, 3.6, 3.7, 3.8, 3.9, "3.10" ]
         cffi: [ yes, no ]
         os: [ ubuntu-latest ]
         include:
           - python-version: 2.7
             cffi: no
-            os: macos-latest
+            os: macos-10.15
           - python-version: 2.7
             cffi: yes
-            os: macos-latest
-          - python-version: 3.9
+            os: macos-10.15
+          - python-version: "3.10"
             cffi: yes
-            os: macos-latest
+            os: macos-10.15
           - python-version: 2.7
             cffi: no
             os: windows-latest
           - python-version: 2.7
             cffi: yes
             os: windows-latest
-          - python-version: 3.9
+          - python-version: "3.10"
             cffi: no
             os: windows-latest
-          - python-version: 3.9
+          - python-version: "3.10"
             cffi: yes
             os: windows-latest
           - python-version: pypy2
@@ -58,7 +58,14 @@ jobs:
 
     - name: Install MSVC
       if: matrix.os == 'windows-latest' && matrix.python-version == '2.7'
-      run: choco install vcpython27
+      uses: ilammy/msvc-dev-cmd@f456b805b3f63911738cb71d4f255e4e129c7e7a
+
+    - name: Prepare environmental variables
+      if: matrix.os == 'windows-latest' && matrix.python-version == '2.7'
+      shell: bash
+      run: |
+        echo "DISTUTILS_USE_SDK=1" >> $GITHUB_ENV
+        echo "MSSdk=1" >> $GITHUB_ENV
 
     - name: Install dependencies
       run: |
@@ -72,10 +79,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.9
+    - name: Set up Python 3.10
       uses: actions/setup-python@v2
       with:
-        python-version: 3.9
+        python-version: "3.10"
     - name: Install dependencies
       run: |
         pip install mypy pycryptodome-test-vectors

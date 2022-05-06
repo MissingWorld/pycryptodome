@@ -16,9 +16,9 @@ PyCryptodome can be used as:
    You install it with::
 
        pip install pycryptodome
-   
+
    In this case, all modules are installed under the ``Crypto`` package.
-    
+
    One must avoid having both PyCrypto and PyCryptodome installed
    at the same time, as they will interfere with each other.
 
@@ -29,7 +29,7 @@ PyCryptodome can be used as:
    You install it with::
 
        pip install pycryptodomex
-   
+
    In this case, all modules are installed under the ``Cryptodome`` package.
    PyCrypto and PyCryptodome can coexist.
 
@@ -41,11 +41,20 @@ with respect to the last official version of PyCrypto (2.6.1):
 * Authenticated encryption modes (GCM, CCM, EAX, SIV, OCB)
 * Accelerated AES on Intel platforms via AES-NI
 * First class support for PyPy
-* Elliptic curves cryptography (NIST P-256, P-384 and P-521 curves only)
+* Elliptic curves cryptography (NIST curves P-192, P-224, P-256, P-384 and P-521)
 * Better and more compact API (`nonce` and `iv` attributes for ciphers,
   automatic generation of random nonces and IVs, simplified CTR cipher mode,
   and more)
-* SHA-3 (including SHAKE XOFs), truncated SHA-512 and BLAKE2 hash algorithms
+* SHA-3 hash algorithms (FIPS 202) and derived functions (NIST SP-800 185):
+
+  - SHAKE128 and SHA256 XOFs
+  - cSHAKE128 and cSHAKE256 XOFs
+  - KMAC128 and KMAC256
+  - TupleHash128 and TupleHash256
+
+* KangarooTwelve XOF (derived from Keccak)
+* Truncated hash algorithms SHA-512/224 and SHA-512/256 (FIPS 180-4)
+* BLAKE2b and BLAKE2s hash algorithms
 * Salsa20 and ChaCha20/XChaCha20 stream ciphers
 * Poly1305 MAC
 * ChaCha20-Poly1305 and XChaCha20-Poly1305 authenticated ciphers

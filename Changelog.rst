@@ -1,18 +1,106 @@
 Changelog
 =========
 
-X.X.X (X XXX 2021)
-++++++++++++++++++++++++
+3.14.1 (5 February 2022)
+++++++++++++++++++++++++++
 
 Resolved issues
 ---------------
-* GH#376: Fixed symbol conflict between different versions of libgmp.
+* GH#595: Fixed memory leak for GMP integers.
+  Thanks to Witalij Siebert and Pablo Quílez.
+
+3.14.0 (30 January 2022)
+++++++++++++++++++++++++++
+
+New features
+------------
+* Add support for curve NIST P-192.
+
+3.13.0 (23 January 2022)
+++++++++++++++++++++++++++
+
+New features
+------------
+* Add support for curve NIST P-224.
+
+Resolved issues
+---------------
+* GH#590: Fixed typing info for ``Crypto.PublicKey.ECC``.
+
+Other changes
+-------------
+* Relaxed ECDSA requirements for FIPS 186 signatures and accept any SHA-2 or SHA-3 hash.
+  ``sign()`` and ``verify()`` will be performed even if the hash is stronger than the ECC key.
+
+3.12.0 (4 December 2021)
+++++++++++++++++++++++++++
+
+New features
+------------
+* ECC keys in the SEC1 format can be exported and imported.
+* Add support for KMAC128, KMAC256, TupleHash128, and TupleHash256 (NIST SP-800 185).
+* Add support for KangarooTwelve.
+
+Resolved issues
+---------------
+* GH#563: An asymmetric key could not be imported as a ``memoryview``.
+* GH#566: cSHAKE128/256 generated a wrong output for customization strings
+  longer than 255 bytes.
+* GH#582: CBC decryption generated the wrong plaintext when the input and the output were the same buffer.
+  Thanks to Michael K. Ashburn.
+
+3.11.0 (8 October 2021)
+++++++++++++++++++++++++++
+
+Resolved issues
+---------------
+* GH#512: Especially for very small bit sizes, ``Crypto.Util.number.getPrime()`` was
+  occasionally generating primes larger than given the bit size. Thanks to Koki Takahashi.
+* GH#552: Correct typing annotations for ``PKCS115_Cipher.decrypt()``.
+* GH#555: ``decrypt()`` method of a PKCS#1v1.5 cipher returned a ``bytearray`` instead of ``bytes``.
+* GH#557: External DSA domain parameters were accepted even when the modulus (``p``) was not prime.
+  This affected ``Crypto.PublicKey.DSA.generate()`` and ``Crypto.PublicKey.DSA.construct()``.
+  Thanks to Koki Takahashi.
+
+New features
+------------
+* Added cSHAKE128 and cSHAKE256 (of SHA-3 family). Thanks to Michael Schaffner.
+* GH#558: The flag RTLD_DEEPBIND passed to ``dlopen()`` is not well supported by
+  `address sanitizers <https://github.com/google/sanitizers/issues/611>`_.
+  It is now possible to set the environment variable ``PYCRYPTDOME_DISABLE_DEEPBIND``
+  to drop that flag and allow security testing.
+
+3.10.4 (25 September 2021)
+++++++++++++++++++++++++++
+
+Resolved issues
+---------------
+* Output of ``Crypto.Util.number.long_to_bytes()`` was not always a multiple of ``blocksize``.
+
+3.10.3 (22 September 2021)
+++++++++++++++++++++++++++
+
+Resolved issues
+---------------
+* GH#376: Fixed symbol conflict between different versions of ``libgmp``.
 * GH#481: Improved robustness of PKCS#1v1.5 decryption against timing attacks.
+* GH#506 and GH#509: Fixed segmentation faults on Apple M1 and other Aarch64 SoCs,
+  when the GMP library was accessed via ``ctypes``. Do not use GMP's own sscanf
+  and snprintf routines: instead, use simpler conversion routines.
+* GH#510: Workaround for ``cffi`` calling ``ctypes.util.find_library()``, which
+  invokes ``gcc`` and ``ld`` on Linux, considerably slowing down all imports.
+  On certain configurations, that may also leave temporary files behind.
 * GH#517: Fix RSAES-OAEP, as it didn't always fail when zero padding was incorrect.
 
 New features
 ------------
 * Added support for SHA-3 hash functions to HMAC.
+
+Other changes
+-------------
+* The Windows wheels of Python 2.7 now require the VS2015 runtime to be installed in the system,
+  because Microsoft stopped distributing the VS2008 compiler in April 2021.
+  VS2008 was used to compile the Python 2.7 extensions.
 
 3.10.1 (9 February 2021)
 ++++++++++++++++++++++++
